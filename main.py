@@ -7,13 +7,21 @@ QQ交流群:788392508
 from tkinter import *
 from tkinter.ttk import *
 from typing import Dict
+from res_calculator import ResCalculator
+import utils
 
 class WinGUI(Tk):
     widget_dic: Dict[str, Widget] = {}
     def __init__(self):
         super().__init__()
+        self.calculator = ResCalculator()
+        self.divider_type=StringVar(value=1)
+        self.res_compose_type=StringVar(value=1)
+
         self.__win()
         self.widget_dic["tk_tabs_lhbmo7q9"] = self.__tk_tabs_lhbmo7q9(self)
+        self.widget_dic["tk_text_lhbny85f"].insert(END,self.calculator.get_res_table())
+
 
     def __win(self):
         self.title("电阻凑算工具")
@@ -207,7 +215,7 @@ class WinGUI(Tk):
         btn = Button(parent, text="计算")
         btn.place(x=480, y=330, width=50, height=30)
         return btn
-
+    
     def __tk_label_lhbueduo(self,parent):
         label = Label(parent,text="标签",anchor="center")
         label.place(x=30, y=170, width=493, height=51)
@@ -282,12 +290,12 @@ class WinGUI(Tk):
         self.widget_dic["tk_radio_button_lhbmrjiz"] = self.__tk_radio_button_lhbmrjiz(frame)
         return frame
     def __tk_radio_button_lhbmrg3d(self,parent):
-        rb = Radiobutton(parent,text="降压")
+        rb = Radiobutton(parent,text="降压",variable=self.divider_type, value=1)
         rb.place(x=10, y=0, width=80, height=25)
         return rb
 
     def __tk_radio_button_lhbmrjiz(self,parent):
-        rb = Radiobutton(parent,text="升压")
+        rb = Radiobutton(parent,text="升压",variable=self.divider_type, value=2)
         rb.place(x=100, y=0, width=80, height=25)
         return rb
 
@@ -302,17 +310,17 @@ class WinGUI(Tk):
         self.widget_dic["tk_radio_button_lhbn9z6i"] = self.__tk_radio_button_lhbn9z6i(frame)
         return frame
     def __tk_radio_button_lhbn9vxx(self,parent):
-        rb = Radiobutton(parent,text="R1+R2")
+        rb = Radiobutton(parent,text="R1+R2",variable=self.res_compose_type, value=1)
         rb.place(x=10, y=10, width=80, height=30)
         return rb
 
     def __tk_radio_button_lhbn9xmo(self,parent):
-        rb = Radiobutton(parent,text="R1//R2+R3")
+        rb = Radiobutton(parent,text="R1//R2+R3",variable=self.res_compose_type, value=3)
         rb.place(x=170, y=10, width=112, height=30)
         return rb
 
     def __tk_radio_button_lhbn9z6i(self,parent):
-        rb = Radiobutton(parent,text="R1//R2")
+        rb = Radiobutton(parent,text="R1//R2",variable=self.res_compose_type, value=2)
         rb.place(x=90, y=10, width=80, height=30)
         return rb
 
@@ -488,13 +496,47 @@ class Win(WinGUI):
         self.__event_bind()
 
     def handle_divider_cal(self,evt):
-        print("<Button-1>事件未处理",evt)
+        vin=utils.get_float_input(self,"lhbmtn25")
+        vout=utils.get_float_input(self,"lhbmurrf")
+        cal_type=int(self.divider_type.get())
+        r1_min=utils.get_float_input(self,"lhbmwkar")
+        r1_max=utils.get_float_input(self,"lhbmwujp")
+        r2_min=utils.get_float_input(self,"lhbmwq7s")
+        r2_max=utils.get_float_input(self,"lhbmwwhb")
+        # print(vin, vout, cal_type, r1_min, r1_max, r2_min, r2_max)
+        self.calculator.voltage_divider_cal(vin, vout, cal_type, r1_min, r1_max, r2_min, r2_max)
+        results = self.calculator.get_results(len=20)
+        table = self.widget_dic["tk_table_lhbn5jnk"]
+        table.delete(*table.get_children())
+        for li in results:
+            table.insert('','end',values=li)
         
     def handle_res_cal(self,evt):
-        print("<Button-1>事件未处理",evt)
+        cal_type=int(self.res_compose_type.get())
+        desired=utils.get_float_input(self,"lhbn7or6")
+        r1_min=utils.get_float_input(self,"lhbnc1sa")
+        r1_max=utils.get_float_input(self,"lhbncnhk")
+        r2_min=utils.get_float_input(self,"lhbnoq64")
+        r2_max=utils.get_float_input(self,"lhbnohw1")
+        r3_min=utils.get_float_input(self,"lhbnoypr")
+        r3_max=utils.get_float_input(self,"lhbnp1be")
+
+        print((desired, cal_type, r1_min, r1_max, r2_min, r2_max, r3_min, r3_max))
+        self.calculator.res_compose_cal(desired, cal_type, r1_min, r1_max, r2_min, r2_max, r3_min, r3_max)
+        results = self.calculator.get_results(len=20)
+        table = self.widget_dic["tk_table_lhbnewl1"]
+        table.delete(*table.get_children())
+        for li in results:
+            table.insert('','end',values=li)
+
         
     def handle_res_import(self,evt):
-        print("<Button-1>事件未处理",evt)
+        res_text = self.widget_dic["tk_text_lhbnzn1i"].get("1.0",END).split(",")
+        res_text=[float(r) for r in res_text]
+        # print(res_text)
+        res_output_text = self.widget_dic["tk_text_lhbny85f"]
+        res_output_text.delete("1.0",END)
+        res_output_text.insert(END,self.calculator.get_res_table())
         
     def __event_bind(self):
         self.widget_dic["tk_button_lhbn5n3b"].bind('<Button-1>',self.handle_divider_cal)
