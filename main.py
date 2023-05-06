@@ -534,7 +534,8 @@ class Win(WinGUI):
         
     def handle_res_import(self,evt):
         res_text = self.widget_dic["tk_text_lhbnzn1i"].get("1.0",END).split(",")
-        res_text=[float(r) for r in res_text]
+        res_table=[float(r) for r in res_text]
+        self.calculator.res_table = res_table
         # print(res_text)
         res_output_text = self.widget_dic["tk_text_lhbny85f"]
         res_output_text.delete("1.0",END)
