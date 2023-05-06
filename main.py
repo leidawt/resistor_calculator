@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 本代码由[Tkinter布局助手]生成
 当前版本:3.2.4
@@ -10,6 +12,8 @@ from typing import Dict
 from res_calculator import ResCalculator
 import utils
 from PIL.ImageTk import PhotoImage
+import sys
+import os
 
 
 class WinGUI(Tk):
@@ -549,6 +553,12 @@ class Win(WinGUI):
 if __name__ == "__main__":
     win = Win()
     # 需先建立TK对象再挂载贴图
-    test_img=PhotoImage(file='./topology.png')
-    win.widget_dic["tk_label_lhbueduo"].configure(image=test_img)
+    # 如需pyinstaller打包，此处需额外处理：
+    # https://stackoverflow.com/questions/53587322/how-do-i-include-files-with-pyinstaller
+    if getattr(sys, 'frozen', False):
+        img = PhotoImage(file=os.path.join(sys._MEIPASS, "./topology.png"))
+    else:
+        img = PhotoImage(file="./topology.png")
+    # img=PhotoImage(file='./topology.png')
+    win.widget_dic["tk_label_lhbueduo"].configure(image=img)
     win.mainloop()
