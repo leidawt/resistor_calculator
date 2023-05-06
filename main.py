@@ -9,6 +9,8 @@ from tkinter.ttk import *
 from typing import Dict
 from res_calculator import ResCalculator
 import utils
+from PIL.ImageTk import PhotoImage
+
 
 class WinGUI(Tk):
     widget_dic: Dict[str, Widget] = {}
@@ -521,7 +523,7 @@ class Win(WinGUI):
         r3_min=utils.get_float_input(self,"lhbnoypr")
         r3_max=utils.get_float_input(self,"lhbnp1be")
 
-        print((desired, cal_type, r1_min, r1_max, r2_min, r2_max, r3_min, r3_max))
+        # print((desired, cal_type, r1_min, r1_max, r2_min, r2_max, r3_min, r3_max))
         self.calculator.res_compose_cal(desired, cal_type, r1_min, r1_max, r2_min, r2_max, r3_min, r3_max)
         results = self.calculator.get_results(len=20)
         table = self.widget_dic["tk_table_lhbnewl1"]
@@ -545,4 +547,7 @@ class Win(WinGUI):
         
 if __name__ == "__main__":
     win = Win()
+    # 需先建立TK对象再挂载贴图
+    test_img=PhotoImage(file='./topology.png')
+    win.widget_dic["tk_label_lhbueduo"].configure(image=test_img)
     win.mainloop()
