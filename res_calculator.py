@@ -75,7 +75,7 @@ class ResCalculator():
             assert(isinstance(len, int))
             raw_results = self.results[:len]
         if return_raw:
-            raw_results
+            return raw_results
         else:
             results = []
             if self.results_type == "voltage_divider_cal":
