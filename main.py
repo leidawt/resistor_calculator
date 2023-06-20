@@ -11,7 +11,6 @@ from tkinter.ttk import *
 from typing import Dict
 from res_calculator import ResCalculator
 import utils
-from PIL.ImageTk import PhotoImage
 import sys
 import os
 import ctypes
