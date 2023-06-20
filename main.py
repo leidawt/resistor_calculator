@@ -14,6 +14,7 @@ import utils
 from PIL.ImageTk import PhotoImage
 import sys
 import os
+import ctypes
 
 
 class WinGUI(Tk):
@@ -252,12 +253,12 @@ class WinGUI(Tk):
 
     def __tk_label_lhbn763h(self, parent):
         label = Label(parent, text="期望R值", anchor="center")
-        label.place(x=20, y=20, width=50, height=30)
+        label.place(x=13, y=20, width=60, height=30)
         return label
 
     def __tk_input_lhbn7or6(self, parent):
         ipt = Entry(parent)
-        ipt.place(x=80, y=20, width=77, height=30)
+        ipt.place(x=85, y=20, width=74, height=30)
         return ipt
 
     def __tk_label_lhbn81re(self, parent):
@@ -586,14 +587,25 @@ class Win(WinGUI):
 
 
 if __name__ == "__main__":
+    # match windows dpi scaling
+    try:  # >= win 8.1
+        ctypes.windll.shcore.SetProcessDpiAwareness(2)
+    except:  # win 8.0 or less
+        try:
+            ctypes.windll.user32.SetProcessDPIAware()
+        except:
+            pass
+
     win = Win()
     # 需先建立TK对象再挂载贴图
     # 如需pyinstaller打包，此处需额外处理：
     # https://stackoverflow.com/questions/53587322/how-do-i-include-files-with-pyinstaller
     if getattr(sys, 'frozen', False):
         img = PhotoImage(file=os.path.join(sys._MEIPASS, "./topology.png"))
+        win.iconbitmap(os.path.join(sys._MEIPASS, "./icon.ico"))
     else:
         img = PhotoImage(file="./topology.png")
+        win.iconbitmap("./icon.ico")
     # img=PhotoImage(file='./topology.png')
     win.widget_dic["tk_label_lhbueduo"].configure(image=img)
     win.mainloop()
