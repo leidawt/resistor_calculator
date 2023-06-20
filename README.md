@@ -26,7 +26,9 @@
 
 # 打包
 
-本项目仅依赖Python3标准库。使用pyinstaller打包可执行文件（见`build.sh`）。
+本项目仅依赖Python3标准库。
+如使用pyinstaller打包可执行文件，执行`pyinstaller_build.sh`。
+如使用nuitka打包可执行文件，执行`nuitka_build.sh`。
 
 `电阻凑算工具.tk` 是[Tkinter布局助手](https://www.pytk.net/tkinter-helper)导出的布局文件，可重新导入进行修改。
 
