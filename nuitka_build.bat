@@ -1,0 +1,1 @@
+python -m nuitka --disable-console --standalone --nofollow-import-to=numpy --enable-plugin=tk-inter --output-dir=dist --windows-icon-from-ico=./icon.ico --include-data-files=./topology.png=./topology.png --include-data-files=./icon.ico=./icon.ico  --remove-output main.py
