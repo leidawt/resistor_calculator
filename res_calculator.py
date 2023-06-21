@@ -53,7 +53,7 @@ class ResCalculator():
         self.results = []
         r3_table = self.res_table if type == 3 else [r3_min]
         for (r1, r2, r3) in itertools.product(self.res_table, self.res_table, r3_table):
-            if r1 >= r1_min and r1 <= r1_max and r2 >= r2_min and r2 <= r2_max and r3 >= r3_min and r3 <= r3_max:
+            if r1 >= r1_min and r1 <= r1_max and r2 >= r2_min and r2 <= r2_max and r3 >= r3_min and r3 <= r3_max and r1 <= r2:
                 if type == 1:
                     r = r1+r2
                 elif type == 2:
